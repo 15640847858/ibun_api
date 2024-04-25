@@ -19,3 +19,9 @@ def get_spark_ai_content(params: Dict):
     parsed_texts = '```python\nfor i in range(5):\n    print("这是第{}次循环".format(i+1))\n```'
 
     return parsed_texts
+
+
+@router.get("/")
+def get_str():
+    # TODO
+    return "test"

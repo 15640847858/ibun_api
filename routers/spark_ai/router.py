@@ -21,7 +21,7 @@ def get_spark_ai_content(params: Dict):
     return parsed_texts
 
 
-@router.post("/v3.5/chat_more")
-def get_spark_ai_contents(params: Dict):
+@router.get("/test")
+def get_str():
     # TODO
-    pass
+    return "test"

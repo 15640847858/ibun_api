@@ -9,7 +9,7 @@
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "routers/spark_ai/router.py"
+      "dest": "app.py"
     }
   ]
 }

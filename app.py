@@ -57,5 +57,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
+@router.get("/test")
+def get_str():
+    # TODO
+    return "test"
+
+
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=5000)

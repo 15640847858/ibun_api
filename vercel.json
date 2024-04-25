@@ -8,8 +8,8 @@
   ],
   "routes": [
     {
-      "src": "/spark_ai/(.*)",
-      "dest": "routers/spark_ai/router.py"
+      "src": "/(.*)",
+      "dest": "app.py"
     }
   ]
 }

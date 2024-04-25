@@ -58,11 +58,17 @@ app.add_middleware(
 )
 
 
-@router.get("/test")
+@router.get("/")
 def get_str():
     # TODO
-    return "test"
+    return "get test"
+
+
+@router.post("/")
+def get_str():
+    # TODO
+    return "post test"
 
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=5000)
+    uvicorn.run(app, host="0.0.0.0")

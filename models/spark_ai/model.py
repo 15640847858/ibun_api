@@ -67,41 +67,46 @@ class SparkAiModel:
             if db:
                 db.disconnect()
 
-        # 星火认知大模型v3.5的URL值，其他版本大模型URL值请前往文档（https://www.xfyun.cn/doc/spark/Web.html）查看
-        SPARKAI_URL = 'wss://spark-api.xf-yun.com/v3.5/chat'
-        # 星火认知大模型调用秘钥信息，请前往讯飞开放平台控制台（https://console.xfyun.cn/services/bm35）查看
-        SPARKAI_APP_ID = '520c0ed9'
-        SPARKAI_API_SECRET = 'N2MzMzhkZjg4ODU0YzI0MmFjMTU2MWM2'
-        SPARKAI_API_KEY = '6793b5ed25fae0ec9141e1cef590e535'
-        # 星火认知大模型v3.5的domain值，其他版本大模型domain值请前往文档（https://www.xfyun.cn/doc/spark/Web.html）查看
-        SPARKAI_DOMAIN = 'generalv3.5'
+        try:
+            # 星火认知大模型v3.5的URL值，其他版本大模型URL值请前往文档（https://www.xfyun.cn/doc/spark/Web.html）查看
+            SPARKAI_URL = 'wss://spark-api.xf-yun.com/v3.5/chat'
+            # 星火认知大模型调用秘钥信息，请前往讯飞开放平台控制台（https://console.xfyun.cn/services/bm35）查看
+            SPARKAI_APP_ID = '520c0ed9'
+            SPARKAI_API_SECRET = 'N2MzMzhkZjg4ODU0YzI0MmFjMTU2MWM2'
+            SPARKAI_API_KEY = '6793b5ed25fae0ec9141e1cef590e535'
+            # 星火认知大模型v3.5的domain值，其他版本大模型domain值请前往文档（https://www.xfyun.cn/doc/spark/Web.html）查看
+            SPARKAI_DOMAIN = 'generalv3.5'
 
-        spark = ChatSparkLLM(
-            spark_api_url=SPARKAI_URL,
-            spark_app_id=SPARKAI_APP_ID,
-            spark_api_key=SPARKAI_API_KEY,
-            spark_api_secret=SPARKAI_API_SECRET,
-            spark_llm_domain=SPARKAI_DOMAIN,
-            streaming=False,
-        )
-
-        # messages = [ChatMessage(
-        #     role="user",
-        #     content='你好呀'
-        # )]
-
-        # 将 params['question'] 转换为与 messages 相同类型的数据
-        question_messages = []
-        for param in params['question']:
-            message = ChatMessage(
-                role=param['role'],
-                content=param['content']
+            spark = ChatSparkLLM(
+                spark_api_url=SPARKAI_URL,
+                spark_app_id=SPARKAI_APP_ID,
+                spark_api_key=SPARKAI_API_KEY,
+                spark_api_secret=SPARKAI_API_SECRET,
+                spark_llm_domain=SPARKAI_DOMAIN,
+                streaming=False,
             )
-            question_messages.append(message)
 
-        handler = ChunkPrintHandler()
-        content = spark.generate([question_messages], callbacks=[handler])
-        # 使用工具类解析text数据
-        parsed_texts = SparkTextParser.parse_text(content)
+            # messages = [ChatMessage(
+            #     role="user",
+            #     content='你好呀'
+            # )]
+
+            # 将 params['question'] 转换为与 messages 相同类型的数据
+            question_messages = []
+            for param in params['question']:
+                message = ChatMessage(
+                    role=param['role'],
+                    content=param['content']
+                )
+                question_messages.append(message)
+
+            handler = ChunkPrintHandler()
+            content = spark.generate([question_messages], callbacks=[handler])
+            # 使用工具类解析text数据
+            parsed_texts = SparkTextParser.parse_text(content)
+        except Error as e:
+            # 处理数据库异常
+            print("星火API调用失败:", e)
+            parsed_texts = "星火API调用失败，待修复。"
 
         return parsed_texts

@@ -36,7 +36,7 @@ for root, dirs, files in os.walk(routers_dir):
             app.include_router(router)
 
 # CORS設定値を取得する
-cors = "*"
+# cors = ["*"]
 
 '''
 CORSMiddleware: 这是 FastAPI 提供的中间件类，用于处理 CORS 相关的请求。
@@ -51,7 +51,7 @@ allow_headers: 列表参数，用于指定允许的 HTTP 头部字段。如果�
 '''
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=cors,
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

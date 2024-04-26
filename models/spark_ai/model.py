@@ -11,62 +11,62 @@ class SparkAiModel:
 
     def get_spark_ai_content(self, params):
 
-        try:
-            db_host = "mysql.sqlpub.com"
-            db_port = 3306
-            db_database = "ibun_mysql"
-            db_username = "ibun_mysql"
-            db_password = "FPduqVo2IABucGg1"
-
-            # 替换以下信息为你的 MySQL 远程数据库连接信息
-            db = MySQLDB(host=db_host, port=db_port, username=db_username, password=db_password, database=db_database)
-            db.connect()
-
-            # 参数验证
-            required_fields = ['ipaddress', 'uniqueIdentifier', 'question']
-            ParamValidator.check_params(params, required_fields)
-
-            # 查询
-            select_condition_keys = ['ipaddress', 'uniqueIdentifier']
-            select_condition_params = SparkTextParser.filter_params(params, select_condition_keys)
-            select_condition = [f"{key} = '{value}'" for key, value in select_condition_params.items()]
-            select_conditions = " AND ".join(select_condition)
-            select_records = db.select_records('chrome_info', select_conditions)
-
-            if select_records:
-                data_to_update = dict()
-                data_to_update['use_count'] = select_records[0][3] + 1
-                update_condition = select_conditions
-                db.update_record('chrome_info', data_to_update, update_condition)
-
-                if data_to_update['use_count'] > 88:
-                    parsed_texts = "尝试太多次了，不行！！！"
-                    return parsed_texts
-
-            else:
-
-                # 插入示例
-                data_to_insert = dict()
-                data_to_insert['ipaddress'] = params['ipaddress']
-                data_to_insert['uniqueIdentifier'] = params['uniqueIdentifier']
-                data_to_insert['local_address'] = ""
-                data_to_insert['use_count'] = 1
-                question = SparkTextParser.optimize_question(params['question'])
-                # 将列表转换为 JSON 字符串
-                data_to_insert['question'] = question[:100] if isinstance(question, str) else str(
-                    question)[:100]
-
-                db.insert_record('chrome_info', data_to_insert)
-        except Error as e:
-            # 处理数据库异常
-            print("数据库操作失败:", e)
-            parsed_texts = "ERROR 500"
-            db.disconnect()
-            # return parsed_texts
-        finally:
-            # 无论是否出现异常，都应该断开数据库连接
-            if db:
-                db.disconnect()
+        # try:
+        #     db_host = "mysql.sqlpub.com"
+        #     db_port = 3306
+        #     db_database = "ibun_mysql"
+        #     db_username = "ibun_mysql"
+        #     db_password = "FPduqVo2IABucGg1"
+        #
+        #     # 替换以下信息为你的 MySQL 远程数据库连接信息
+        #     db = MySQLDB(host=db_host, port=db_port, username=db_username, password=db_password, database=db_database)
+        #     db.connect()
+        #
+        #     # 参数验证
+        #     required_fields = ['ipaddress', 'uniqueIdentifier', 'question']
+        #     ParamValidator.check_params(params, required_fields)
+        #
+        #     # 查询
+        #     select_condition_keys = ['ipaddress', 'uniqueIdentifier']
+        #     select_condition_params = SparkTextParser.filter_params(params, select_condition_keys)
+        #     select_condition = [f"{key} = '{value}'" for key, value in select_condition_params.items()]
+        #     select_conditions = " AND ".join(select_condition)
+        #     select_records = db.select_records('chrome_info', select_conditions)
+        #
+        #     if select_records:
+        #         data_to_update = dict()
+        #         data_to_update['use_count'] = select_records[0][3] + 1
+        #         update_condition = select_conditions
+        #         db.update_record('chrome_info', data_to_update, update_condition)
+        #
+        #         if data_to_update['use_count'] > 88:
+        #             parsed_texts = "尝试太多次了，不行！！！"
+        #             return parsed_texts
+        #
+        #     else:
+        #
+        #         # 插入示例
+        #         data_to_insert = dict()
+        #         data_to_insert['ipaddress'] = params['ipaddress']
+        #         data_to_insert['uniqueIdentifier'] = params['uniqueIdentifier']
+        #         data_to_insert['local_address'] = ""
+        #         data_to_insert['use_count'] = 1
+        #         question = SparkTextParser.optimize_question(params['question'])
+        #         # 将列表转换为 JSON 字符串
+        #         data_to_insert['question'] = question[:100] if isinstance(question, str) else str(
+        #             question)[:100]
+        #
+        #         db.insert_record('chrome_info', data_to_insert)
+        # except Error as e:
+        #     # 处理数据库异常
+        #     print("数据库操作失败:", e)
+        #     parsed_texts = "ERROR 500"
+        #     db.disconnect()
+        #     # return parsed_texts
+        # finally:
+        #     # 无论是否出现异常，都应该断开数据库连接
+        #     if db:
+        #         db.disconnect()
 
         try:
             # 星火认知大模型v3.5的URL值，其他版本大模型URL值请前往文档（https://www.xfyun.cn/doc/spark/Web.html）查看

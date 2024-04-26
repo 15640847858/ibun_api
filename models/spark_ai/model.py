@@ -51,9 +51,10 @@ class SparkAiModel:
                 data_to_insert['uniqueIdentifier'] = params['uniqueIdentifier']
                 data_to_insert['local_address'] = ""
                 data_to_insert['use_count'] = 1
+                question = SparkTextParser.optimize_question(params['question'])
                 # 将列表转换为 JSON 字符串
-                data_to_insert['question'] = params['question'] if isinstance(params['question'], str) else str(
-                    params['question'])
+                data_to_insert['question'] = question[:100] if isinstance(question, str) else str(
+                    question)[:100]
 
                 db.insert_record('chrome_info', data_to_insert)
         except Error as e:
@@ -93,7 +94,7 @@ class SparkAiModel:
 
             # 将 params['question'] 转换为与 messages 相同类型的数据
             question_messages = []
-            for param in params['question']:
+            for param in question:
                 message = ChatMessage(
                     role=param['role'],
                     content=param['content']

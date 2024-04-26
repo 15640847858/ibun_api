@@ -15,3 +15,23 @@ class SparkTextParser:
     @staticmethod
     def filter_params(params, keys):
         return {key: params[key] for key in keys if key in params}
+
+    @staticmethod
+    def optimize_question(params):
+        optimized_params = []
+        total_length = 0
+
+        for item in reversed(params):
+            content = item['content']
+            content_length = len(content)
+            if total_length + content_length <= 760:
+                optimized_params.insert(0, item)
+                total_length += content_length
+            else:
+                remaining_length = 800 - total_length
+                truncated_content = content[:remaining_length]
+                item['content'] = truncated_content
+                optimized_params.insert(0, item)
+                break  # 结束循环，因为已经达到800字符长度
+
+        return optimized_params

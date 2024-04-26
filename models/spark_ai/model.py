@@ -92,6 +92,8 @@ class SparkAiModel:
             #     content='你好呀'
             # )]
 
+            question = SparkTextParser.optimize_question(params['question'])
+
             # 将 params['question'] 转换为与 messages 相同类型的数据
             question_messages = []
             for param in question:

@@ -14,11 +14,11 @@ def get_spark_ai_content(params: Dict):
     """
     model = SparkAiModel()
 
-    # arsed_texts = model.get_spark_ai_content(params)
+    content = model.get_spark_ai_content(params)
 
-    parsed_texts = '```python\nfor i in range(5):\n    print("这是第{}次循环".format(i+1))\n```'
+    # parsed_texts = '```python\nfor i in range(5):\n    print("这是第{}次循环".format(i+1))\n```'
 
-    return parsed_texts
+    return content
 
 
 @router.get("/")
